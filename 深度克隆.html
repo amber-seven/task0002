@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+	function deepClone(obj){
+		var result={},oClass=isClass(obj);
+		//if(oClass==="object"){
+		//	result={};
+		//}else if(oClass==="Array"){
+		//	result=[];
+		//}else{
+		//	return obj;
+		//}
+		for(key in obj){
+			var copy=obj[key];
+			if(isClass(copy)==="Object"){
+				result[key]=arguments.callee(copy);//传说中的递归
+			}else if(isClass(copy)==="Array"){
+				result[key]=arguments.callee(copy);
+			}else{
+				result[key]=obj[key];
+			}
+		}
+		return result;
+	}
+	function isClass(o){
+		if(o===null) return "Null";
+		if(o===undefined) return "Undefined";
+		return Object.prototype.toString.call(o).slice(8,-1);//[object String]取8-最后位前，即为string;
+	}//排除null，undefined；
+	var oPerson={
+		oName:"rookiebob",
+		oAge:"18",
+		oAddress:{
+			province:"beijing"
+		},
+		ofavorite:[
+			"swimming",
+			{reading:"history book"}
+		],
+		skill:function(){
+			console.log("bob is coding");
+		}
+	};
+	var oNew=deepClone(oPerson);
+	oNew.ofavorite[1].reading="picture";
+	console.log(oNew.ofavorite[1].reading);
+	console.log(oPerson.ofavorite[1].reading);
+	
+
+	oNew.oAddress.province="shanghai";
+	console.log(oPerson.oAddress.province);
+	console.log(oNew.oAddress.province);
+</script>
+</html>
